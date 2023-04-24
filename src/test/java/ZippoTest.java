@@ -149,6 +149,28 @@ public class ZippoTest {
     }
 
 
+//    http://api.zippopotam.us/us/90210    path PARAM
+//
+//    https://sonuc.osym.gov.tr/Sorgu.aspx?SonucID=9617  Query PARAM
+    @Test
+    public void pathParamTest(){
+        given()
+                .pathParam("ulke","us")
+                .pathParam("postaKod", 90210)
+                .log().uri()  // request link
+
+                .when()
+                .get("https://api.zippopotam.us/{ulke}/{postaKod}")
+
+                .then()
+                .statusCode(200)
+                .log().body()
+
+                ;
+    }
+
+
+
 }
 
 
