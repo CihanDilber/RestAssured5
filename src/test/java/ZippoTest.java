@@ -164,9 +164,29 @@ public class ZippoTest {
 
                 .then()
                 .statusCode(200)
-                .log().body()
+                //.log().body()
 
                 ;
+    }
+
+
+    @Test
+    public void queryParamTest(){
+
+        // https://gorest.co.in/public/v1/users?page=2
+
+        given()
+                .param("page", 1)
+                .log().uri()  // request link
+
+                .when()
+                .get("https://gorest.co.in/public/v1/users")  // ?`page=1
+
+                .then()
+                .statusCode(200)
+                .log().body()
+
+        ;
     }
 
 
