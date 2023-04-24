@@ -93,6 +93,46 @@ public class ZippoTest {
                 .statusCode(200)
                 .body("places[0].state", equalTo("California"));
 
+    }
+
+    @Test
+    public void checkHasItemy() {  // equalTo ile ayni calisir
+
+        given()
+
+                .when()
+                .get("http://api.zippopotam.us/tr/01000")
+
+                .then()
+                // .log().body()
+
+                .statusCode(200)
+                .body("places.'place name'", hasItem("Dörtağaç Köyü"));
+        // butun place name lerin herhangi birinde Dortagac koyu var mi?
+
+    }
+
+    @Test
+    public void bodyArrayHasSizeTest() {  // equalTo ile ayni calisir
+
+        given()
+
+                .when()
+                .get("https://api.zippopotam.us/us/90210")
+
+                .then()
+                //.log().body()
+
+                .statusCode(200)
+                .body("places", hasSize(1));
+
+
+    }
+
+
+}
+
+
 //    PM                            RestAssured
 //    body.country                  body("country")
 //    body.'post code'              body("post code")
@@ -113,9 +153,5 @@ public class ZippoTest {
 //                "latitude": "34.0901"
 //        }
 //    ]
-    }
-
-}
-
 
 
