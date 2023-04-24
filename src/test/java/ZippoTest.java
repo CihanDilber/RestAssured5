@@ -130,6 +130,25 @@ public class ZippoTest {
     }
 
 
+    @Test
+    public void combiningTest() {  // equalTo ile ayni calisir
+
+        given()
+
+                .when()
+                .get("https://api.zippopotam.us/us/90210")
+
+                .then()
+                //.log().body()
+
+                .statusCode(200)
+                .body("places.state", hasItem("California")) // verilen path deki list bu iteme sahip mi
+                .body("places[0].'place name'", equalTo("Beverly Hills")); // verilen path de ki deger buna esit mi
+
+
+    }
+
+
 }
 
 
