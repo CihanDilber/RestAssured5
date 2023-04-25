@@ -1,4 +1,10 @@
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import static io.restassured.RestAssured.*;  // bunu hepsine manuel ekliyoruz
 import static org.hamcrest.Matchers.*;       // bunu da
@@ -213,6 +219,44 @@ public class ZippoTest {
             ;
         }
 
+    }
+
+    RequestSpecification requestSpec;  // istek
+    ResponseSpecification responseSpec;  // donus
+
+    @BeforeClass     // kullanmadan once calismasi gerektigi icin beforeclass yaptik
+    public void Setup(){
+
+        baseURI = "https://gorest.co.in/public/v1";  // bu kendi calisiyor cagirmana gerek yok
+
+        requestSpec = new RequestSpecBuilder()
+                .log(LogDetail.URI)
+                .setContentType(ContentType.JSON)
+                .build();
+
+        responseSpec = new ResponseSpecBuilder()
+                .expectContentType(ContentType.JSON)
+                .expectStatusCode(200)   // bu code baska gelecekse burayi guncellemek gerekir
+                .log(LogDetail.BODY)
+                .build();
+    }
+
+
+
+    @Test
+    public void requestResponseSpecification()
+    {
+
+        given()
+                .param("page",1)
+                .spec(requestSpec)
+
+                .when()
+                .get("/users") // base URI oldugu icin sadece bunu yazdik. onden sabitledik
+
+                .then()
+                .spec(responseSpec)
+        ;
     }
 
 
