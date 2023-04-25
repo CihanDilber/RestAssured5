@@ -7,6 +7,9 @@ import io.restassured.specification.ResponseSpecification;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.util.List;
+
 import static io.restassured.RestAssured.*;  // bunu hepsine manuel ekliyoruz
 import static org.hamcrest.Matchers.*;       // bunu da
 
@@ -85,6 +88,30 @@ public class ZippoTest {
         ;
 
     }
+
+    //    PM                            RestAssured
+//    body.country                  body("country")
+//    body.'post code'              body("post code")
+//    body.places[0].'place name'   body("places[0].'place name'")
+//    body.places.'place name'      body("places.'place name'")
+//    bütün place nameleri bir arraylist olarak verir
+//
+//    {
+//        "post code": "90210",
+//            "country": "United States",
+//            "country abbreviation": "US",
+//            "places": [
+//        {
+//            "place name": "Beverly Hills",
+//                "longitude": "-118.4065",
+//                "state": "California",
+//                "state abbreviation": "CA",
+//                "latitude": "34.0901"
+//        }
+//    ]
+
+
+
 
     @Test
     public void checkStateInResponseBody() {
@@ -313,29 +340,46 @@ public class ZippoTest {
         System.out.println("limit = " + limit);
     }
 
+    @Test
+    public void extractingJsonPath4() {
+        // https://gorest.co.in/public/v1/users  dönen değerdeki bütün idleri yazdırınız.
+
+        List<Integer> idler=
+                given()
+
+                        .when()
+                        .get("https://gorest.co.in/public/v1/users")
+
+                        .then()
+                        .statusCode(200)
+                        .extract().path("data.id"); // bütün id leri ver
+        ;
+
+        System.out.println("idler = " + idler);
+    }
+
+    @Test
+    public void extractingJsonPath5() {
+        // https://gorest.co.in/public/v1/users  dönen değerdeki bütün name lei yazdırınız.
+
+        List<String> names=
+                given()
+
+                        .when()
+                        .get("https://gorest.co.in/public/v1/users")
+
+                        .then()
+                        .statusCode(200)
+                        .extract().path("data.name"); // bütün id leri ver
+        ;
+
+        System.out.println("names = " + names);
+    }
+
 
 }
 
 
-//    PM                            RestAssured
-//    body.country                  body("country")
-//    body.'post code'              body("post code")
-//    body.places[0].'place name'   body("places[0].'place name'")
-//    body.places.'place name'      body("places.'place name'")
-//    bütün place nameleri bir arraylist olarak verir
-//
-//    {
-//        "post code": "90210",
-//            "country": "United States",
-//            "country abbreviation": "US",
-//            "places": [
-//        {
-//            "place name": "Beverly Hills",
-//                "longitude": "-118.4065",
-//                "state": "California",
-//                "state abbreviation": "CA",
-//                "latitude": "34.0901"
-//        }
-//    ]
+
 
 
