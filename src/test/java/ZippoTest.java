@@ -1,3 +1,5 @@
+import Model.Location;
+import Model.Place;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
@@ -112,8 +114,6 @@ public class ZippoTest {
 //    ]
 
 
-
-
     @Test
     public void checkStateInResponseBody() {
 
@@ -123,7 +123,7 @@ public class ZippoTest {
                 .get("https://api.zippopotam.us/us/90210")
 
                 .then()
-               //  .log().body()
+                //  .log().body()
 
                 .statusCode(200)
                 .body("places[0].state", equalTo("California"));
@@ -184,13 +184,13 @@ public class ZippoTest {
     }
 
 
-//    http://api.zippopotam.us/us/90210    path PARAM
+    //    http://api.zippopotam.us/us/90210    path PARAM
 //
 //    https://sonuc.osym.gov.tr/Sorgu.aspx?SonucID=9617  Query PARAM
     @Test
-    public void pathParamTest(){
+    public void pathParamTest() {
         given()
-                .pathParam("ulke","us")
+                .pathParam("ulke", "us")
                 .pathParam("postaKod", 90210)
                 .log().uri()  // request link
 
@@ -199,14 +199,14 @@ public class ZippoTest {
 
                 .then()
                 .statusCode(200)
-                //.log().body()
+        //.log().body()
 
-                ;
+        ;
     }
 
 
     @Test
-    public void queryParamTest(){
+    public void queryParamTest() {
 
         // https://gorest.co.in/public/v1/users?page=2
 
@@ -226,13 +226,13 @@ public class ZippoTest {
 
 
     @Test
-    public void queryParamTest2(){
+    public void queryParamTest2() {
 
         // https://gorest.co.in/public/v1/users?page=3
         // bu linkteki 1 den 10 kadar sayfaları çağırdığınızda response daki donen page degerlerinin
         // çağrılan page nosu ile aynı olup olmadığını kontrol ediniz.
 
-        for (int i = 1; i < 10 ; i++) {
+        for (int i = 1; i < 10; i++) {
             given()
                     .param("page", i)
                     .log().uri()
@@ -254,7 +254,7 @@ public class ZippoTest {
     ResponseSpecification responseSpec;  // donus
 
     @BeforeClass     // kullanmadan once calismasi gerektigi icin beforeclass yaptik
-    public void Setup(){
+    public void Setup() {
 
         baseURI = "https://gorest.co.in/public/v1";  // bu kendi calisiyor cagirmana gerek yok
 
@@ -271,13 +271,11 @@ public class ZippoTest {
     }
 
 
-
     @Test
-    public void requestResponseSpecification()
-    {
+    public void requestResponseSpecification() {
 
         given()
-                .param("page",1)
+                .param("page", 1)
                 .spec(requestSpec)
 
                 .when()
@@ -289,26 +287,25 @@ public class ZippoTest {
     }
 
     @Test
-    public void extractingJsonPath(){
+    public void extractingJsonPath() {
 
-        String countryName=
+        String countryName =
                 given()
                         .when()
                         .get("http://api.zippopotam.us/us/90210")
 
                         .then()
                         //.log().body()
-                        .extract().path("country")
-                ;
+                        .extract().path("country");
 
         System.out.println("countryName = " + countryName);
-        Assert.assertEquals(countryName,"United States");
+        Assert.assertEquals(countryName, "United States");
     }
 
     @Test
     public void extractingJsonPath2() {
         //placeName
-        String placeName=
+        String placeName =
                 given()
                         .when()
                         .get("http://api.zippopotam.us/us/90210")
@@ -319,14 +316,14 @@ public class ZippoTest {
                 ;
 
         System.out.println("placeName = " + placeName);
-        Assert.assertEquals(placeName,"Beverly Hills");
+        Assert.assertEquals(placeName, "Beverly Hills");
     }
 
     @Test
     public void extractingJsonPath3() {
         // https://gorest.co.in/public/v1/users  dönen değerdeki limit bilgisini yazdırınız.
 
-        int limit=
+        int limit =
                 given()
 
                         .when()
@@ -335,8 +332,7 @@ public class ZippoTest {
                         .then()
                         //.log().body()
                         .statusCode(200)
-                        .extract().path("meta.pagination.limit")
-                ;
+                        .extract().path("meta.pagination.limit");
 
         System.out.println("limit = " + limit);
     }
@@ -345,7 +341,7 @@ public class ZippoTest {
     public void extractingJsonPath4() {
         // https://gorest.co.in/public/v1/users  dönen değerdeki bütün idleri yazdırınız.
 
-        List<Integer> idler=
+        List<Integer> idler =
                 given()
 
                         .when()
@@ -363,7 +359,7 @@ public class ZippoTest {
     public void extractingJsonPath5() {
         // https://gorest.co.in/public/v1/users  dönen değerdeki bütün name lei yazdırınız.
 
-        List<String> names=
+        List<String> names =
                 given()
 
                         .when()
@@ -380,7 +376,7 @@ public class ZippoTest {
 
     @Test
     public void extractingJsonPathResponsAll() {
-      //  tum datalari aliyoruz bu sekilde
+        //  tum datalari aliyoruz bu sekilde
 
         Response donenData =
                 given()
@@ -394,9 +390,9 @@ public class ZippoTest {
                         .extract().response(); // dönen tüm datayı verir.
         ;
 
-        List<Integer> idler= donenData.path("data.id");
-        List<String> names= donenData.path("data.name");
-        int limit= donenData.path("meta.pagination.limit");
+        List<Integer> idler = donenData.path("data.id");
+        List<String> names = donenData.path("data.name");
+        int limit = donenData.path("meta.pagination.limit");
 
         System.out.println("idler = " + idler);
         System.out.println("names = " + names);
@@ -405,6 +401,29 @@ public class ZippoTest {
         Assert.assertTrue(names.contains("Dakshayani Pandey"));
         Assert.assertTrue(idler.contains(1203767));
         Assert.assertEquals(limit, 10, "test sonucu hatalı");
+    }
+
+    @Test
+    public void extractJsonAll()
+    {
+        Location locationNesnesi=
+                given()
+                        .when()
+                        .get("http://api.zippopotam.us/us/90210")
+
+                        .then()
+                        //.log().body()
+                        .extract().body().as(Location.class)
+                // // Location şablonuna
+                ;
+
+        System.out.println("locationNesnesi.getCountry() = " +
+                locationNesnesi.getCountry());
+
+        for(Place p: locationNesnesi.getPlaces())
+            System.out.println("p = " + p);
+
+        System.out.println(locationNesnesi.getPlaces().get(0).getPlacename());
     }
 
 }

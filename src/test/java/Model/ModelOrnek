@@ -1,0 +1,44 @@
+{
+    "post code": "90210",
+    "country": "United States",
+    "country abbreviation": "US",
+    "places": [
+        {
+            "place name": "Beverly Hills",
+            "longitude": "-118.4065",
+            "state": "California",
+            "state abbreviation": "CA",
+            "latitude": "34.0901"
+        }
+    ]
+}
+
+
+public class Location{
+   String postcode;
+   String country;
+   String country abbreviation;
+   ArrayList<place>  places;
+}
+
+
+public class place{
+  String placename;
+  String longitude;
+  String state;
+  String stateabbreviation
+  String latitude;
+}
+
+
+
+
+ okulNo : 3
+ adı    : "ismet"
+ soyadı : "temur"
+
+ class Ogrenci{
+    int okulNo;
+    String adi;
+    String soyadi;
+ }
