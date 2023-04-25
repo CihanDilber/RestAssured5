@@ -229,7 +229,7 @@ public class ZippoTest {
 
         baseURI = "https://gorest.co.in/public/v1";  // bu kendi calisiyor cagirmana gerek yok
 
-        requestSpec = new RequestSpecBuilder()
+        requestSpec = new RequestSpecBuilder()   // bu kodlari tekrar yazmamak icin buraya koyduk
                 .log(LogDetail.URI)
                 .setContentType(ContentType.JSON)
                 .build();
