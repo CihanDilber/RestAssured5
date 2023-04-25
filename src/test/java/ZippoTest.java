@@ -2,6 +2,7 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.testng.Assert;
@@ -376,6 +377,35 @@ public class ZippoTest {
         System.out.println("names = " + names);
     }
 
+
+    @Test
+    public void extractingJsonPathResponsAll() {
+      //  tum datalari aliyoruz bu sekilde
+
+        Response donenData =
+                given()
+
+                        .when()
+                        .get("https://gorest.co.in/public/v1/users")
+
+                        .then()
+                        .statusCode(200)
+                        // .log().body()
+                        .extract().response(); // dönen tüm datayı verir.
+        ;
+
+        List<Integer> idler= donenData.path("data.id");
+        List<String> names= donenData.path("data.name");
+        int limit= donenData.path("meta.pagination.limit");
+
+        System.out.println("idler = " + idler);
+        System.out.println("names = " + names);
+        System.out.println("limit = " + limit);
+
+        Assert.assertTrue(names.contains("Dakshayani Pandey"));
+        Assert.assertTrue(idler.contains(1203767));
+        Assert.assertEquals(limit, 10, "test sonucu hatalı");
+    }
 
 }
 
