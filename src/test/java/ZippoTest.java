@@ -43,9 +43,9 @@ public class ZippoTest {
                 .get("https://api.zippopotam.us/us/90210")
 
                 .then()
-                .log().body()          // donen body jason datasi. hepsini gostersin istersen    log.all()  yazilir
+                .log().body()          // donen body jason datasi. hepsini gostersin istersen    log.all()  yazilir, data disindaki bilgileri verir
                 // bu kisim her zaman calismasina gerek yok. gormek icin
-                .statusCode(200)       // donus kodu 200 mu
+                .statusCode(200)       // donus kodu 200 MU?  then den sonra yazdiklarin assertion, test, data islemleri
 
         ;
 
@@ -71,7 +71,7 @@ public class ZippoTest {
 
 
     @Test
-    public void checkCountryInResponseBody() {
+    public void checkCountryInResponseBody() {  // bilgiyi kontrol ettik burada
 
         given()
 
@@ -83,23 +83,24 @@ public class ZippoTest {
                 // bu kisim her zaman calismasina gerek yok. gormek icin
                 .statusCode(200)       // donus kodu 200 mu
                 .body("country", equalTo("United States"))  // body nin country degiskeni "United States" esit MI
+                                                            // datayi disina almadan icerde kontrol ediyorsun. hamcrest sayesinde. yukarda ekliyoruz
 
         // postman de soyle yapmistik
         // pm.response.json.id --> body.id
 
 
         ;
-
     }
+    // https://jsonpathfinder.com/
+    //    Postman                     RestAssured
 
-    //    PM                            RestAssured
 //    body.country                  body("country")
-//    body.'post code'              body("post code")
+//    body.'post code'              body("post code")                    // post code arada bosluk icerdigi icin '' icine alindi
 //    body.places[0].'place name'   body("places[0].'place name'")
-//    body.places.'place name'      body("places.'place name'")
-//    bütün place nameleri bir arraylist olarak verir
+//    body.places.'place name'      body("places.'place name'")         //    bütün place nameleri bir arraylist olarak verir
+
 //
-//    {
+//    { --> body
 //        "post code": "90210",
 //            "country": "United States",
 //            "country abbreviation": "US",
@@ -123,7 +124,7 @@ public class ZippoTest {
                 .get("https://api.zippopotam.us/us/90210")
 
                 .then()
-                //  .log().body()
+                //  .log().body()             // buyasi zorunlu degil. gormek istersek aciyoruz
 
                 .statusCode(200)
                 .body("places[0].state", equalTo("California"));
@@ -131,7 +132,7 @@ public class ZippoTest {
     }
 
     @Test
-    public void checkHasItemy() {  // equalTo ile ayni calisir
+    public void checkHasItemTest() {
 
         given()
 
@@ -142,13 +143,14 @@ public class ZippoTest {
                 // .log().body()
 
                 .statusCode(200)
-                .body("places.'place name'", hasItem("Dörtağaç Köyü"));
-        // butun place name lerin herhangi birinde Dortagac koyu var mi?
+                .body("places.'place name'", hasItem("Dörtağaç Köyü"));    // butun place name lerin herhangi birinde Dortagac koyu var mi?
+                                                                           // bu dizi bunu iceriyor mu?
+
 
     }
 
     @Test
-    public void bodyArrayHasSizeTest() {  // equalTo ile ayni calisir
+    public void bodyArrayHasSizeTest() {
 
         given()
 
@@ -156,7 +158,7 @@ public class ZippoTest {
                 .get("https://api.zippopotam.us/us/90210")
 
                 .then()
-                //.log().body()
+                //.log().body()                  // once burayi aciyoruz bakiyoruz size ne kadar sonra kapattik
 
                 .statusCode(200)
                 .body("places", hasSize(1));
@@ -166,7 +168,7 @@ public class ZippoTest {
 
 
     @Test
-    public void combiningTest() {  // equalTo ile ayni calisir
+    public void combiningTest() {
 
         given()
 
@@ -176,7 +178,8 @@ public class ZippoTest {
                 .then()
                 //.log().body()
 
-                .statusCode(200)
+                .statusCode(200)              // yani birden fazla testi alt alta yazabiliyoruz
+                .body("places", hasSize(1))  // size ı 1 mi
                 .body("places.state", hasItem("California")) // verilen path deki list bu iteme sahip mi
                 .body("places[0].'place name'", equalTo("Beverly Hills")); // verilen path de ki deger buna esit mi
 
@@ -184,22 +187,22 @@ public class ZippoTest {
     }
 
 
-    //    http://api.zippopotam.us/us/90210    path PARAM
+    //    http://api.zippopotam.us/us/90210    path PARAM    // bu 1. yontem
 //
-//    https://sonuc.osym.gov.tr/Sorgu.aspx?SonucID=9617  Query PARAM
+//    https://sonuc.osym.gov.tr/Sorgu.aspx?SonucID=9617  Query PARAM   // bu da 2. yontem
     @Test
     public void pathParamTest() {
         given()
                 .pathParam("ulke", "us")
                 .pathParam("postaKod", 90210)
-                .log().uri()  // request link
+                .log().uri()  // request URL
 
                 .when()
-                .get("https://api.zippopotam.us/{ulke}/{postaKod}")
+                .get("https://api.zippopotam.us/{ulke}/{postaKod}")    // given in altinda parametre verdik burada kullandik
 
                 .then()
                 .statusCode(200)
-        //.log().body()
+              //.log().body()
 
         ;
     }
@@ -208,7 +211,7 @@ public class ZippoTest {
     @Test
     public void queryParamTest() {
 
-        // https://gorest.co.in/public/v1/users?page=2
+        // https://gorest.co.in/public/v1/users?page=1
 
         given()
                 .param("page", 1)
