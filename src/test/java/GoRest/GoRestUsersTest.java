@@ -46,8 +46,21 @@ public class GoRestUsersTest {
 
 
 
-    @Test
+    @Test(dependsOnMethods = "createUser")
     public void getUserByID(){
+
+        given()
+                .header("Authorization", "Bearer af9f652d58c653ec36210debee67541bce2ef6bf5466cae735e1a09562282daa")
+
+                .when()
+                .get("https://gorest.co.in/public/v2/users/"+userID)
+
+                .then()
+                .log().body()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("id",equalTo(userID))
+        ;
 
 
     }
