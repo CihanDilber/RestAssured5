@@ -1,7 +1,10 @@
 package GoRest;
 
 import com.github.javafaker.Faker;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
@@ -14,6 +17,19 @@ public class GoRestUsersTest {
 
     Faker randomUretici=new Faker();
     int userID;
+
+    RequestSpecification reqSpec;
+    @BeforeClass
+    public void setup(){
+        baseURI = "https://gorest.co.in/public/v2/users";   // baseUri ReqSpec den once tanimlanmali yoksa sifirlaniyor
+        //baseURI ="https://test.gorest.co.in/public/v2/users/";
+
+        reqSpec = new RequestSpecBuilder()
+                .addHeader("Authorization", "Bearer e4b22047188da067d3bd95431d94259f63896347f9864894a0a7013ee5f9c703")
+                .setContentType(ContentType.JSON)
+                .build();
+
+    }
 
     @Test(enabled = false)
     public void createUserJson(){
@@ -29,14 +45,13 @@ public class GoRestUsersTest {
 
         userID=
                 given()
-                        .header("Authorization","Bearer af9f652d58c653ec36210debee67541bce2ef6bf5466cae735e1a09562282daa")
-                        .contentType(ContentType.JSON) // gönderilecek data JSON
+                        .spec(reqSpec)
                         .body("{\"name\":\""+rndFullName+"\", \"gender\":\"male\", \"email\":\""+rndEmail+"\", \"status\":\"active\"}")
                         //.log().uri()
                         //.log().body()
 
                         .when()
-                        .post("https://gorest.co.in/public/v2/users")
+                        .post("")
 
                         .then()
                         .log().body()
@@ -59,14 +74,13 @@ public class GoRestUsersTest {
 
         userID =
                 given()
-                        .header("Authorization", "Bearer af9f652d58c653ec36210debee67541bce2ef6bf5466cae735e1a09562282daa")
-                        .contentType(ContentType.JSON) // gönderilecek data JSON
+                        .spec(reqSpec)
                         .body(newUser)
                         //.log().uri()
                         //.log().body()
 
                         .when()
-                        .post("https://gorest.co.in/public/v2/users")
+                        .post("")
 
                         .then()
                         .log().body()
@@ -88,14 +102,13 @@ public class GoRestUsersTest {
 
         userID =
                 given()
-                        .header("Authorization", "Bearer af9f652d58c653ec36210debee67541bce2ef6bf5466cae735e1a09562282daa")
-                        .contentType(ContentType.JSON) // gönderilecek data JSON
+                        .spec(reqSpec)
                         .body(newUser)
                         //.log().uri()
                         //.log().body()
 
                         .when()
-                        .post("https://gorest.co.in/public/v2/users")
+                        .post("")
 
                         .then()
                         .log().body()
@@ -111,10 +124,10 @@ public class GoRestUsersTest {
     public void getUserByID(){
 
         given()
-                .header("Authorization", "Bearer af9f652d58c653ec36210debee67541bce2ef6bf5466cae735e1a09562282daa")
+                .spec(reqSpec)
 
                 .when()
-                .get("https://gorest.co.in/public/v2/users/"+userID)
+                .get("" + userID)
 
                 .then()
                 .log().body()
@@ -126,17 +139,38 @@ public class GoRestUsersTest {
 
     }
 
-    @Test
-    public void updateUser(){
+    @Test(dependsOnMethods = "getUserByID")
+    public void updateUser() {
 
+        Map<String,String> updateUser=new HashMap<>();
+        updateUser.put("name","ismet temur");
 
+        given()
+                .spec(reqSpec)
+                .body(updateUser)
+
+                .when()
+                .put("" + userID)
+
+                .then()
+                .log().body()
+                .statusCode(200)
+                .body("id", equalTo(userID))
+                .body("name", equalTo("ismet temur"))
+        ;
     }
-
-    @Test
+    @Test(dependsOnMethods = "updateUser")
     public void deleteUser(){
 
 
     }
+
+
+    @Test(dependsOnMethods = "deleteUser")
+    public void deleteUserNegative() {
+
+    }
+
 
 
 }
