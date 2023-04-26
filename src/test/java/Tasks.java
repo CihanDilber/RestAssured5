@@ -1,3 +1,4 @@
+import Model.ToDo;
 import io.restassured.http.ContentType;
 import org.testng.annotations.Test;
 
@@ -27,6 +28,30 @@ public class Tasks {
                 .contentType(ContentType.TEXT)
         ;
 
+    }
+
+    /** Task 1
+
+     create a request to https://jsonplaceholder.typicode.com/todos/2
+     expect status 200
+     Converting Into POJO*/
+
+    @Test
+    public void task1()
+    {
+        ToDo todo=
+                given()
+                        .when()
+                        .get("https://jsonplaceholder.typicode.com/todos/2")
+
+                        .then()
+                        .log().body()
+                        .statusCode(200)
+                        .extract().body().as(ToDo.class)
+                ;
+
+        System.out.println("todo = " + todo);
+        System.out.println("todo.getTitle() = " + todo.getTitle());
     }
 
 }
