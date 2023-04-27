@@ -160,15 +160,30 @@ public class GoRestUsersTest {
         ;
     }
     @Test(dependsOnMethods = "updateUser")
-    public void deleteUser(){
+    public void deleteUser() {
 
+        given()
+                .spec(reqSpec)
+                .when()
+                .delete(""+userID)
 
+                .then()
+                .log().all()
+                .statusCode(204)
+        ;
     }
 
 
     @Test(dependsOnMethods = "deleteUser")
     public void deleteUserNegative() {
+        given()
+                .spec(reqSpec)
+                .when()
+                .delete(""+userID)
 
+                .then()
+                .log().all()
+                .statusCode(404);
     }
 
 
