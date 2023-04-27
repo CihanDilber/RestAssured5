@@ -97,8 +97,9 @@ public class PathAndJsonPath {
 
         // Daha önceki örneklerde (as) Clas dönüşümleri için tüm yapıya karşılık gelen
         // gereken tüm classları yazarak dönüştürüp istediğimiz elemanlara ulaşıyorduk.
+
         // Burada ise(JsonPath) aradaki bir veriyi clasa dönüştürerek bir list olarak almamıza
-        // imkan veren JSONPATH i kullandık.Böylece tek class ise veri alınmış oldu
+        // imkan veren JSONPATH i kullandık.Böylece tek class ile veri alınmış oldu
         // diğer class lara gerek kalmadan
 
         // path : class veya tip dönüşümüne imkan veremeyen direk veriyi verir. List<String> gibi
