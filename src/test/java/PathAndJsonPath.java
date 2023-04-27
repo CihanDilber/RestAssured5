@@ -1,5 +1,10 @@
 
+import GoRest.User;
+import io.restassured.response.Response;
 import org.testng.annotations.Test;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static io.restassured.RestAssured.*;
 
@@ -39,5 +44,32 @@ public class PathAndJsonPath {
                 ;
 
         System.out.println("postCode = " + postCode);
+    }
+
+
+    @Test
+    public void getUsers() {
+        Response response =
+                given()
+
+                        .when()
+                        .get("https://gorest.co.in/public/v2/users")
+
+                        .then()
+                        //.log().body()
+                        .extract().response();
+        ;
+
+        int idPath = response.path("[2].id");
+        int idJsonPath = response.jsonPath().getInt("[2].id");
+
+        System.out.println("idPath = " + idPath);
+        System.out.println("idJsonPath = " + idJsonPath);
+
+        User[] usersPath= response.as(User[].class);
+        List<User> usersJsonPath= response.jsonPath().getList("", User.class);
+
+        System.out.println("usersPath = " + Arrays.toString(usersPath));
+        System.out.println("usersJsonPath = " + usersJsonPath);
     }
 }
