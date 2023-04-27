@@ -72,4 +72,34 @@ public class PathAndJsonPath {
         System.out.println("usersPath = " + Arrays.toString(usersPath));
         System.out.println("usersJsonPath = " + usersJsonPath);
     }
+
+    @Test
+    public void getUsersV1()
+    {
+        Response body=
+                given()
+
+                        .when()
+                        .get("https://gorest.co.in/public/v1/users")
+
+                        .then()
+                        //.log().body()
+                        .extract().response();
+        ;
+
+        List<User> dataUsers= body.jsonPath().getList("data", User.class);
+        // JSONPATH bir response içindeki bir parçayı nesneye ödnüştürebiliriz.
+        System.out.println("dataUsers = " + dataUsers);
+
+
+
+        // Daha önceki örneklerde (as) Clas dönüşümleri için tüm yapıya karşılık gelen
+        // gereken tüm classları yazarak dönüştürüp istediğimiz elemanlara ulaşıyorduk.
+        // Burada ise(JsonPath) aradaki bir veriyi clasa dönüştürerek bir list olarak almamıza
+        // imkan veren JSONPATH i kullandık.Böylece tek class ise veri alınmış oldu
+        // diğer class lara gerek kalmadan
+
+        // path : class veya tip dönüşümüne imkan veremeyen direk veriyi verir. List<String> gibi
+        // jsonPath : class dönüşümüne ve tip dönüşümüne izin vererek , veriyi istediğimiz formatta verir.
+    }
 }
