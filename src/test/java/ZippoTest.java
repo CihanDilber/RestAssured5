@@ -60,8 +60,7 @@ public class ZippoTest {
                 .get("https://api.zippopotam.us/us/90210")
 
                 .then()
-                .log().body()          // donen body jason datasi. hepsini gostersin istersen    log.all()  yazilir
-                // bu kisim her zaman calismasina gerek yok. gormek icin
+                .log().body()
                 .statusCode(200)       // donus kodu 200 mu
                 .contentType(ContentType.JSON)  // donen sonuc JSON mi
 
@@ -79,8 +78,7 @@ public class ZippoTest {
                 .get("https://api.zippopotam.us/us/90210")
 
                 .then()
-                .log().body()          // donen body jason datasi. hepsini gostersin istersen    log.all()  yazilir
-                // bu kisim her zaman calismasina gerek yok. gormek icin
+                .log().body()
                 .statusCode(200)       // donus kodu 200 mu
                 .body("country", equalTo("United States"))  // body nin country degiskeni "United States" esit MI
                                                             // datayi disina almadan icerde kontrol ediyorsun. hamcrest sayesinde. yukarda ekliyoruz
@@ -124,10 +122,11 @@ public class ZippoTest {
                 .get("https://api.zippopotam.us/us/90210")
 
                 .then()
-                //  .log().body()             // buyasi zorunlu degil. gormek istersek aciyoruz
+                //  .log().body()             // burasi zorunlu degil. gormek istersek aciyoruz
 
                 .statusCode(200)
-                .body("places[0].state", equalTo("California"));
+                .body("places[0].state", equalTo("California"))
+        ;
 
     }
 
@@ -140,7 +139,7 @@ public class ZippoTest {
                 .get("http://api.zippopotam.us/tr/01000")
 
                 .then()
-                // .log().body()
+                //.log().body()
 
                 .statusCode(200)
                 .body("places.'place name'", hasItem("Dörtağaç Köyü"));    // butun place name lerin herhangi birinde Dortagac koyu var mi?
@@ -214,7 +213,7 @@ public class ZippoTest {
         // https://gorest.co.in/public/v1/users?page=1
 
         given()
-                .param("page", 1)
+                .param("page", 1)  // query param olunca sadece param diye yaziliyor
                 .log().uri()  // request link
 
                 .when()
